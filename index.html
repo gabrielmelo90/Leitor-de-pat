@@ -3611,7 +3611,7 @@ function createCameraFrame(){
 function getCaptureLocation(){return new Promise(resolve=>{if(!navigator.geolocation){resolve('Localização não disponível');return;}navigator.geolocation.getCurrentPosition(pos=>resolve(`${pos.coords.latitude.toFixed(5)}, ${pos.coords.longitude.toFixed(5)}`),()=>resolve('Localização não disponível'),{enableHighAccuracy:false,timeout:2500,maximumAge:60000});});}
 async function stampCanvas(canvas){const when=new Date(),loc=await getCaptureLocation(),ctx=canvas.getContext('2d');const stamp=`${loc} · ${when.toLocaleDateString('pt-BR')} ${when.toLocaleTimeString('pt-BR')}`;const size=Math.max(14,Math.round(canvas.width*.018));ctx.font=`${size}px Arial`;const pad=Math.round(size*.65),w=ctx.measureText(stamp).width+pad*2,h=size+pad*1.5;ctx.fillStyle='rgba(0,0,0,.52)';ctx.fillRect(0,canvas.height-h,Math.min(canvas.width,w),h);ctx.fillStyle='#fff';ctx.fillText(stamp,pad,canvas.height-pad*.55,canvas.width-pad*2);return {location:loc,capturedAt:when.toISOString()};}
 async function capturePhotoOnly(){return captureAndProcess();}
-async function captureAndProcess(){
+async async function captureAndProcess(){
   if(state.ocrBusy){notify('Aguarde a leitura anterior terminar antes de fotografar novamente.');return;}
   const canvas=createCameraFrame();if(!canvas)return;const meta=await stampCanvas(canvas),photoData=canvas.toDataURL('image/jpeg',.92);state.lastPhotoData=photoData;
   const thumb=$('cameraThumb');if(thumb){thumb.src=photoData;thumb.style.display='block';}
